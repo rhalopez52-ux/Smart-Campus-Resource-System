@@ -1,0 +1,294 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <limits>
+
+using namespace std;
+
+const int MAX_STUDENTS = 50;
+const int DEPARTMENTS = 4;
+const int RESOURCE_TYPES = 4;
+
+struct Student {
+    int id;
+    string name;
+    string section;
+    string yearLevel;
+    string status;
+};
+
+struct Resource {
+    string id;
+    string name;
+    string category;
+    int capacity;
+};
+
+Student studentList[MAX_STUDENTS];
+int studentCount = 0;
+
+int resourceMatrix[DEPARTMENTS][RESOURCE_TYPES] = {
+    {12, 3, 8, 5},
+    {9, 2, 4, 10},
+    {5, 6, 10, 2},
+    {4, 8, 6, 3}
+};
+
+string deptNames[DEPARTMENTS] = {"D1 - IT Dept", "D2 - Engineering", "D3 - Business", "D4 - Education"};
+string resourceNames[RESOURCE_TYPES] = {"R-01", "R-02", "R-03", "R-04"};
+
+int getValidIntegerInput(string prompt) {
+    int value;
+    while (true) {
+        cout << prompt;
+        if (cin >> value) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
+        } else {
+            cout << "[ERROR] Invalid input! Please enter a valid integer.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+}
+
+int findStudentIndexById(int id) {
+    for (int i = 0; i < studentCount; i++) {
+        if (studentList[i].id == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void initializeSampleData() {
+    studentList[0] = {1001, "Dela Cruz, Juan", "BSIT-1A", "1st Year", "Active"};
+    studentList[1] = {1002, "Santos, Maria", "BSIT-1A", "1st Year", "Active"};
+    studentList[2] = {1003, "Reyes, Carlo", "BSIT-1B", "1st Year", "Active"};
+    studentList[3] = {1004, "Bautista, Ana", "BSIT-1B", "1st Year", "Inactive"};
+    studentList[4] = {1005, "Garcia, Miguel", "BSIT-1A", "1st Year", "Active"};
+    studentCount = 5;
+}
+
+void addStudent() {
+    cout << "\n--- ADD NEW STUDENT RECORD ---\n";
+    if (studentCount >= MAX_STUDENTS) {
+        cout << "[ERROR] Maximum array capacity reached (50 records)!\n";
+        return;
+    }
+
+    int id = getValidIntegerInput("Enter Student ID (Positive Number): ");
+    if (id <= 0) {
+        cout << "[ERROR] Student ID must be a positive number!\n";
+        return;
+    }
+
+    if (findStudentIndexById(id) != -1) {
+        cout << "[ERROR] Duplicate Record! Student ID already exists.\n";
+        return;
+    }
+
+    Student newStudent;
+    newStudent.id = id;
+
+    cout << "Enter Full Name: ";
+    getline(cin, newStudent.name);
+    
+    cout << "Enter Section: ";
+    getline(cin, newStudent.section);
+
+    cout << "Enter Year Level: ";
+    getline(cin, newStudent.yearLevel);
+
+    newStudent.status = "Active";
+
+    studentList[studentCount] = newStudent;
+    studentCount++;
+
+    cout << "[SUCCESS] Student record successfully added!\n";
+}
+
+void displayStudents() {
+    cout << "\n--- STUDENT RECORDS LIST ---\n";
+    if (studentCount == 0) {
+        cout << "[NOTICE] No records available to display.\n";
+        return;
+    }
+
+    cout << left << setw(12) << "ID" 
+         << setw(22) << "Name" 
+         << setw(12) << "Section" 
+         << setw(12) << "Year" 
+         << setw(10) << "Status" << endl;
+    cout << string(68, '-') << endl;
+
+    for (int i = 0; i < studentCount; i++) {
+        cout << left << setw(12) << studentList[i].id
+             << setw(22) << studentList[i].name
+             << setw(12) << studentList[i].section
+             << setw(12) << studentList[i].yearLevel
+             << setw(10) << studentList[i].status << endl;
+    }
+}
+
+void searchStudent() {
+    cout << "\n--- SEARCH STUDENT RECORD ---\n";
+    if (studentCount == 0) {
+        cout << "[NOTICE] No records to search.\n";
+        return;
+    }
+
+    int id = getValidIntegerInput("Enter Student ID to Search: ");
+    int index = findStudentIndexById(id);
+
+    if (index != -1) {
+        cout << "\n[FOUND] Record Details:\n";
+        cout << "ID: " << studentList[index].id << endl;
+        cout << "Name: " << studentList[index].name << endl;
+        cout << "Section: " << studentList[index].section << endl;
+        cout << "Year Level: " << studentList[index].yearLevel << endl;
+        cout << "Status: " << studentList[index].status << endl;
+    } else {
+        cout << "[NOT FOUND] Student with ID " << id << " does not exist.\n";
+    }
+}
+
+void updateStudent() {
+    cout << "\n--- UPDATE STUDENT RECORD ---\n";
+    int id = getValidIntegerInput("Enter Student ID to Update: ");
+    int index = findStudentIndexById(id);
+
+    if (index == -1) {
+        cout << "[NOT FOUND] Student record not found.\n";
+        return;
+    }
+
+    cout << "Updating details for " << studentList[index].name << endl;
+    cout << "Enter New Full Name (Press Enter to keep current): ";
+    string name;
+    getline(cin, name);
+    if (!name.empty()) studentList[index].name = name;
+
+    cout << "Enter New Section (Press Enter to keep current): ";
+    string section;
+    getline(cin, section);
+    if (!section.empty()) studentList[index].section = section;
+
+    cout << "Enter New Year Level (Press Enter to keep current): ";
+    string year;
+    getline(cin, year);
+    if (!year.empty()) studentList[index].yearLevel = year;
+
+    cout << "[SUCCESS] Student record updated successfully!\n";
+}
+
+void deleteStudent() {
+    cout << "\n--- DELETE STUDENT RECORD ---\n";
+    int id = getValidIntegerInput("Enter Student ID to Delete: ");
+    int index = findStudentIndexById(id);
+
+    if (index == -1) {
+        cout << "[NOT FOUND] Student record not found.\n";
+        return;
+    }
+
+    for (int i = index; i < studentCount - 1; i++) {
+        studentList[i] = studentList[i + 1];
+    }
+    studentCount--;
+
+    cout << "[SUCCESS] Student record deleted successfully!\n";
+}
+
+void manageCampusResources() {
+    cout << "\n--- MANAGE CAMPUS RESOURCES (DYNAMIC MEMORY) ---\n";
+    
+    Resource* dynamicResource = new Resource();
+
+    cout << "Enter Dynamic Resource ID (e.g. R-06): ";
+    getline(cin, dynamicResource->id);
+
+    cout << "Enter Resource Name: ";
+    getline(cin, dynamicResource->name);
+
+    cout << "Enter Category: ";
+    getline(cin, dynamicResource->category);
+
+    dynamicResource->capacity = getValidIntegerInput("Enter Capacity: ");
+
+    cout << "\n[RESOURCE ALLOCATED IN HEAP MEMORY]\n";
+    cout << "ID: " << dynamicResource->id << " | Name: " << dynamicResource->name 
+         << " | Category: " << dynamicResource->category 
+         << " | Capacity: " << dynamicResource->capacity << endl;
+
+    delete dynamicResource;
+    dynamicResource = nullptr;
+
+    cout << "[MEMORY FREED] Dynamic memory allocated for resource was deleted successfully (No Leaks).\n";
+}
+
+void displayResourceMatrix() {
+    cout << "\n--- CAMPUS RESOURCE UTILIZATION MATRIX (HOURS/WEEK) ---\n\n";
+
+    cout << left << setw(18) << "Department";
+    for (int j = 0; j < RESOURCE_TYPES; j++) {
+        cout << setw(10) << resourceNames[j];
+    }
+    cout << setw(12) << "Total Hours" << endl;
+    cout << string(60, '=') << endl;
+
+    int colSums[RESOURCE_TYPES] = {0};
+
+    for (int i = 0; i < DEPARTMENTS; i++) {
+        int rowSum = 0;
+        cout << left << setw(18) << deptNames[i];
+        for (int j = 0; j < RESOURCE_TYPES; j++) {
+            cout << setw(10) << resourceMatrix[i][j];
+            rowSum += resourceMatrix[i][j];
+            colSums[j] += resourceMatrix[i][j];
+        }
+        cout << setw(12) << rowSum << endl;
+    }
+
+    cout << string(60, '-') << endl;
+    cout << left << setw(18) << "Total Utilization";
+    for (int j = 0; j < RESOURCE_TYPES; j++) {
+        cout << setw(10) << colSums[j];
+    }
+    cout << endl;
+}
+
+int main() {
+    initializeSampleData();
+    int choice = 0;
+
+    while (choice != 8) {
+        cout << "\n========================================\n";
+        cout << "SMART CAMPUS RESOURCE MANAGEMENT SYSTEM\n";
+        cout << "========================================\n";
+        cout << "1. Add Student\n";
+        cout << "2. Display Students\n";
+        cout << "3. Search Student\n";
+        cout << "4. Update Student\n";
+        cout << "5. Delete Student\n";
+        cout << "6. Manage Campus Resources (Dynamic Memory)\n";
+        cout << "7. Display Resource Matrix\n";
+        cout << "8. Exit\n";
+
+        choice = getValidIntegerInput("Enter choice: ");
+
+        switch (choice) {
+            case 1: addStudent(); break;
+            case 2: displayStudents(); break;
+            case 3: searchStudent(); break;
+            case 4: updateStudent(); break;
+            case 5: deleteStudent(); break;
+            case 6: manageCampusResources(); break;
+            case 7: displayResourceMatrix(); break;
+            case 8: cout << "\nExiting System. Program terminated successfully.\n"; break;
+            default: cout << "\n[ERROR] Invalid choice! Please select between 1 and 8.\n"; break;
+        }
+    }
+
+    return 0;
+}
