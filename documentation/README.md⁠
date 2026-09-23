@@ -1,0 +1,10 @@
+Smart Campus Resource Management System Documentation
+
+System Overview:
+This project is a C++ console application designed for managing student records and tracking campus resource utilization.
+
+Complexity Analysis:
+- Direct Array Access: O(1)
+- Array Traversal: O(n)
+- Linear Search: O(n)
+- Matrix Processing: O(n^2)
