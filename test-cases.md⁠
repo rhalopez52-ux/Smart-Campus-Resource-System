@@ -1,9 +1,0 @@
-# Test Cases - Smart Campus Resource Management System
-
-| Test ID | Feature Tested | Input Data | Expected Output | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| TC-01 | Add Student | ID: 101, Name: Juan Dela Cruz, Course: BSIT, Year: 1 | Success message displayed | Passed |
-| TC-02 | Display Students | Option 2 selected | Tabular list of registered students | Passed |
-| TC-03 | Search Student | Search ID: 101 | Displays student details | Passed |
-| TC-04 | Dynamic Memory | Enter equipment count: 2, Names: Projector, Mic | Registered equipment list displayed and memory deallocated | Passed |
-| TC-05 | Resource Matrix | Option 7 selected | 3x3 Department utilization table displayed | Passed |
