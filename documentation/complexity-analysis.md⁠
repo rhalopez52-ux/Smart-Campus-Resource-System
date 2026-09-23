@@ -1,0 +1,10 @@
+# Complexity Analysis - Smart Campus Resource Management System
+
+## 1. Linear Search ($O(n)$)
+- Traverses through the vector sequentially. Worst case checks every element, resulting in $O(n)$ time complexity.
+
+## 2. Bubble Sort ($O(n^2)$)
+- Uses nested loops to compare adjacent student IDs. Yields a quadratic time complexity of $O(n^2)$.
+
+## 3. 2D Array Matrix Processing ($O(n^2)$)
+- Processes a static 2D array using nested loops for department resource allocation.
