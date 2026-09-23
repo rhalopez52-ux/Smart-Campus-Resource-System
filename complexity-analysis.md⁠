@@ -1,0 +1,13 @@
+# Complexity Analysis - Smart Campus Resource Management System
+
+## 1. Linear Search ($O(n)$)
+- **Function:** `searchStudent()`
+- **Explanation:** Traverses through the vector of students sequentially. In the worst-case scenario, it checks every element, resulting in a time complexity of $O(n)$, where $n$ is the total number of student records.
+
+## 2. Bubble Sort ($O(n^2)$)
+- **Function:** `sortStudents()`
+- **Explanation:** Uses nested loops to compare adjacent student IDs and swap them if they are in the wrong order. This yields a quadratic time complexity of $O(n^2)$.
+
+## 3. 2D Array Matrix Processing ($O(n^2)$)
+- **Function:** `displayResourceMatrix()`
+- **Explanation:** Processes a static 2D array (`matrix[3][3]`) using nested loops to output department resource allocation hours.
